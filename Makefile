@@ -1,7 +1,10 @@
 
 DEST=dest
 SOURCE=src
-all: $(DEST)/tests $(DEST)/libtconfig.a
+all: $(DEST) $(DEST)/libtconfig.a
+
+$(DEST):
+	mkdir -p $(DEST)
 
 $(DEST)/libtconfig.a: $(SOURCE)/tconfig.cpp $(SOURCE)/tconfig.hh
 	cd src && $(MAKE) 
