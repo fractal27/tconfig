@@ -2,8 +2,6 @@
 
 
 
-
-
 if [ $USER = root ]; then
 	echo -e "[\e[34m WARNING\t\e[0m] installing as root: using \`/usr\` path to install library."
 	lib=/usr/lib
@@ -26,3 +24,22 @@ echo -e "[\e[33m PROCESS\t\e[0m] initializing installation"
 	exit 1
 }
 
+{
+	if [ $USER == root ]; then
+		if ! test -f /lib/libtconfig.a; then
+			cp dest/libtconfig.a /lib/libtconfig.a
+			echo -e "[\e[32m OK\t\e[0m] Library successfully installed globally."
+		else
+			echo -e "[\e[33m WARNING\t\e[0m] library 'libtconfig.a' already installed"
+		fi
+	elif ! test -f $HOME/lib/libtconfig.a; then
+		mkdir -p $HOME/lib
+		cp dest/libtconfig.a $HOME/lib/libtconfig.a
+		echo -e "[\e[32m OK\t\e[0m] Library successfully installed locally."
+	else
+		echo -e "[\e[33m WARNING\t\e[0m] library 'libtconfig.a' already installed"
+	fi
+} || {
+	echo -e "[\e[31m FAIL\t\e[0m] Library could not be installed."
+	exit 1
+}
