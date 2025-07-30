@@ -1,16 +1,14 @@
+#MAKEFILE 
 
-DEST=dest
-SOURCE=src
-all: $(DEST) $(DEST)/libtconfig.a
 
-$(DEST):
-	mkdir -p $(DEST)
+all:
+	cd src && $(MAKE)
 
-$(DEST)/libtconfig.a: $(SOURCE)/tconfig.cpp $(SOURCE)/tconfig.hh
-	cd src && $(MAKE) 
-
-$(DEST)/tests: $(SOURCE)/i32.test.cpp $(SOURCE)/char.test.cpp $(SOURCE)/str.test.cpp $(SOURCE)/bool.test.cpp $(SOURCE)/test.cpp
+test:
 	cd src && $(MAKE) test
 
+clean:
+	rm build/*.o build/*.a build/*.so
 
-.PHONY: all test
+.PHONY: test all clean
+

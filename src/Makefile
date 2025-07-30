@@ -1,19 +1,18 @@
-DEST=../dest
 
-all: $(DEST)/tconfig.o $(DEST)/libtconfig.a
+build:=../build
+TESTFLAGS=
+#TESTFLAGS:=-DDEBUG
 
-$(DEST)/tconfig.o: tconfig.cpp tconfig.hh
-	g++ -c tconfig.cpp -o $(DEST)/tconfig.o
 
-$(DEST)/libtconfig.a: $(DEST)/tconfig.o
-	ar rcs $(DEST)/libtconfig.a $(DEST)/tconfig.o
-$(DEST)/runTests: str.test.cpp i32.test.cpp bool.test.cpp char.test.cpp test.cpp
-	g++ test.cpp str.test.cpp i32.test.cpp bool.test.cpp char.test.cpp -lgtest -o $(DEST)/runTests
+all: $(build)/libtconfig.a $(build)/tconfig.o
 
-test: 
-	$(MAKE) $(DEST)/runTests
+test:
+	g++ -o $(build)/test test.cpp tconfig.cpp -lgtest $(TESTFLAGS)
 
-build:
-	$(MAKE)
+$(build)/tconfig.o: tconfig.cpp tconfig.hh
+	g++ -c tconfig.cpp -o $(build)/tconfig.o
 
-.PHONY: test build
+$(build)/libtconfig.a: $(build)/tconfig.o
+	ar rvs $(build)/libtconfig.a $(build)/tconfig.o
+
+.PHONY: test all

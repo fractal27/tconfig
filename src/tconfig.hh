@@ -13,7 +13,7 @@ namespace tconfig {
 	};
 
 	typedef union {
-		char* str;
+		const char* str;
 		int i32;
 		char ch;
 		bool bol;

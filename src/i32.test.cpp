@@ -6,7 +6,7 @@
 
 TEST(i32, basic)
 {
-	std::ifstream t("../Testing/i32_basic.config",std::ifstream::in);
+	std::ifstream t("Testing/i32_basic.config",std::ifstream::in);
 	std::stringstream buffer;
 
 	ASSERT_TRUE(t.good());
@@ -27,7 +27,7 @@ TEST(i32, basic)
 
 TEST(i32, largequantity)
 {
-	std::ifstream t("../Testing/i32_largequant.config", std::ifstream::in);
+	std::ifstream t("Testing/i32_largequant.config", std::ifstream::in);
 	std::stringstream buffer;
 	
 	ASSERT_TRUE(t.good());

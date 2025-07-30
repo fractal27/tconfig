@@ -1,11 +1,9 @@
 #include "tconfig.hh"
-#include <cstring>
 #include <string>
 #include <sstream>
 #include <fstream>
 #include <type_traits>
-
-#define DEBUG false
+#include <cstring>
 
 bool isdigit(std::string str){
 	char* p;
@@ -63,7 +61,7 @@ tconfig::TCParser::parse_nextl()
 		std::cout << "tconfig: TCParser: already finished parsing" << std::endl;
 		return this;
 	}
-#if DEBUG
+#ifdef DEBUG
 	std::cout << "---- DEBUG parser line " << this->line << "-----" <<
 		std::endl;
 #endif
@@ -71,10 +69,9 @@ tconfig::TCParser::parse_nextl()
 	std::string varname = "";
 	std::string literal = "";
 	int original_index = this->index;
-	char* str;
 
-#if DEBUG
-	std::cout << "parsing string \"" << this->text.substr(this->index) << "\""
+#ifdef DEBUG
+	std::cout << "parsing string `" << this->text.substr(this->index) << "`:"
 		  << "\nwith index " << this->index << std::endl
 		  << "\nfrom text " << "\"" << this->text << "\"\n";
 #endif
@@ -82,7 +79,7 @@ tconfig::TCParser::parse_nextl()
 	this->line++;
 
 	for(char c: this->text.substr(this->index)){
-#if DEBUG
+#ifdef DEBUG
 		std::cout << "\tparsing character \"" << c << "\"" << std::endl;
 #endif
 
@@ -118,35 +115,36 @@ tconfig::TCParser::parse_nextl()
 		return this;
 	}
 
-	tconfig::literal* literal_map = new tconfig::literal();
-	tconfig::sliteral* lit = new tconfig::sliteral();
+	tconfig::literal literal_map;
+	tconfig::sliteral lit;
 
 	if(literal == "false")
 	{
-		lit->bol = false;
-		literal_map->setlit(*lit);
-		literal_map->settype(tconfig::lit_t::bol);
-#if DEBUG
+		lit.bol = false;
+		literal_map.setlit(lit);
+		literal_map.settype(tconfig::lit_t::bol);
+#ifdef DEBUG
 		std::cout << "\ttype: boolean" << std::endl;
 #endif
 	} else if (literal == "true"){
-		lit->bol = true;
-		literal_map->setlit(*lit);
-		literal_map->settype(tconfig::lit_t::bol);
-#if DEBUG
+		lit.bol = true;
+		literal_map.setlit(lit);
+		literal_map.settype(tconfig::lit_t::bol);
+#ifdef DEBUG
 		std::cout << "\ttype: boolean" << std::endl;
 #endif
 
 	} else if (literal.find('\"') == 0){
-		literal = literal.substr(1,
-				literal.length()-2);
-		str = (char*)malloc(literal.length());
-		strcpy(str,literal.c_str());
-		lit->str = str;
-		
-		literal_map->setlit(*lit);
-		literal_map->settype(tconfig::lit_t::str);
-#if DEBUG
+		std::string fin_str = (literal.substr(1,
+				literal.length()-2));
+		char* lit_str = (char*) malloc(sizeof(char)*(fin_str.length()+1));
+		strncpy(lit_str,fin_str.c_str(),fin_str.length());
+		lit_str[fin_str.length()] = '\0';
+		lit.str = lit_str;
+
+		literal_map.setlit(lit);
+		literal_map.settype(tconfig::lit_t::str);
+#ifdef DEBUG
 		std::cout << "\ttype: string" << std::endl;
 #endif
 
@@ -158,18 +156,18 @@ tconfig::TCParser::parse_nextl()
 			return this;
 		}
 
-		lit->ch = literal[1];
-		literal_map->setlit(*lit);
-		literal_map->settype(tconfig::lit_t::ch);
+		lit.ch = literal[1];
+		literal_map.setlit(lit);
+		literal_map.settype(tconfig::lit_t::ch);
 
-#if DEBUG
+#ifdef DEBUG
 		std::cout << "type: character" << std::endl;
 #endif
 	} else if (isdigit(literal)) {
-		lit->i32 = std::stoi(literal);
-		literal_map->setlit(*lit);
-		literal_map->settype(tconfig::lit_t::i32);
-#if DEBUG
+		lit.i32 = std::stoi(literal);
+		literal_map.setlit(lit);
+		literal_map.settype(tconfig::lit_t::i32);
+#ifdef DEBUG
 		std::cout << "\ttype: integer" << std::endl;
 #endif
 
@@ -180,11 +178,11 @@ tconfig::TCParser::parse_nextl()
 		return this;
 	}
 
-#if DEBUG
+#ifdef DEBUG
 	std::cout << "mapped \"" << varname << "\" to \""
 		  << literal     << "\"" << std::endl;
 #endif
-	this->mappings[varname] = *literal_map;
+	this->mappings[varname] = literal_map;
 	if(this->line == this->text.length()-1){
 		this->finished = true;
 	}
@@ -198,7 +196,7 @@ tconfig::TCParser::parse(){
 		this->parse_nextl(); // parse line
 	}
 
-#if DEBUG
+#ifdef DEBUG
 	std::cout << "---- finished parsing. ----" << std::endl;
 #endif
 	return this;
@@ -310,7 +308,7 @@ tconfig::TCParser::getint(std::string name)
 					: type == tconfig::lit_t::str
 					  ? "string"
 					  : type == tconfig::lit_t::i32
-					    ? "integer"
+					    ? ""
 					    : type == tconfig::lit_t::ch
 					      ? "character"
 				              : "?";
@@ -333,9 +331,7 @@ tconfig::TCParser::getchar(std::string name)
 					  ? "string"
 					  : type == tconfig::lit_t::i32
 					    ? "integer"
-					    : type == tconfig::lit_t::ch
-					      ? "char"
-					      : "<?>";
+					    : "";
 	std::cout << "instead found type: " << newtype << "\n";
 	exit(1);
 }
@@ -345,7 +341,7 @@ tconfig::TCParser::getstr(std::string name)
 {
 	if(this->mappings[name].gettype() == tconfig::lit_t::str)
 	{
-		return std::string(this->mappings[name].getlit().str);
+		return this->mappings[name].getlit().str;
 	}
 	std::cerr << "TCParser: ERROR: string not found with name \""<< name <<"\"";
 	exit(1);

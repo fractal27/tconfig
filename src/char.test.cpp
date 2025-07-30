@@ -6,7 +6,7 @@
 
 TEST(ch, basic)
 {
-	std::ifstream t("../Testing/char_basic.config",std::ifstream::in);
+	std::ifstream t("Testing/char_basic.config",std::ifstream::in);
 	std::stringstream buffer;
 
 	ASSERT_TRUE(t.good());
@@ -25,7 +25,7 @@ TEST(ch, basic)
 
 TEST(ch,spaces)
 {
-	std::ifstream t("../Testing/char_wspaces.config", std::ifstream::in);
+	std::ifstream t("Testing/char_wspaces.config", std::ifstream::in);
 	std::stringstream buffer;
 	//std::cout << " 1 " << std::endl;
 	ASSERT_TRUE(t.good());

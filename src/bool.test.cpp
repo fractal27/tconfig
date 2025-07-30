@@ -4,7 +4,7 @@
 
 TEST(boolean,basic)
 {
-	std::ifstream t("../Testing/bol_basic.config",std::ifstream::in);
+	std::ifstream t("Testing/bol_basic.config",std::ifstream::in);
 	std::stringstream buffer;
 
 	ASSERT_TRUE(t.good());
