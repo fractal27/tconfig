@@ -1,10 +1,9 @@
-# A small configuration file module
+# Tiny Config
 
-This is a lightweight POC implementation made to learn the fundementals of parsers, c++ projects and such.
-This project can be compiled into different things, but first to test it after installing `gtest`
-you can run `make test`, and you can test it with `cd build/ && ./test`.
+This is a lightweight POC implementation made to learn the fundementals of c++ configuration parsers and such.
+This project can be compiled into different things, but first to test it run this:
 ```sh
-ẞ anon [tconfig] → sudo pacman -S gtest
+ẞ anon [tconfig] → sudo pacman -S gtest # or install gtest in your system of choice(using apt, dnf)
 ẞ anon [tconfig] → make test
 ẞ anon [tconfig] → cd build/ && ./test
 NOTE: This file must run into the build/ directory, where the Testing directory is located, to get the data for the data assertions.
