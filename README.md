@@ -3,8 +3,10 @@
 This is a lightweight POC implementation made to learn the fundementals of parsers, c++ projects and such.
 This project can be compiled into different things, but first to test it after installing `gtest`
 you can run `make test`, and you can test it with `cd build/ && ./test`.
-```
-ẞ anon [build] → ./test
+```sh
+ẞ anon [tconfig] → sudo pacman -S gtest
+ẞ anon [tconfig] → make test
+ẞ anon [tconfig] → cd build/ && ./test
 NOTE: This file must run into the build/ directory, where the Testing directory is located, to get the data for the data assertions.
 [==========] Running 6 tests from 4 test suites.
 [----------] Global test environment set-up.
